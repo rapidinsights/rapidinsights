@@ -30,13 +30,11 @@ The outer template is shown in `````markdown ... ````` (four-backtick) fences so
 
 ## Cross-Cutting Contracts
 
-<Interfaces, schemas, or data shapes that span PRs. Canonical reference for the human reviewer.
+<Interfaces, schemas, or data shapes that span PRs. Canonical reference for the human reviewer. Each per-PR Spec block below reproduces the relevant subset inline (the implementation tool cannot follow references back to this section).
 
-**Note:** each per-PR Spec block below must reproduce the relevant contract subset inline — the implementation tool reads only the Spec block and cannot follow references back to this section. Tolerate the duplication; the canonical version here is what reviewers compare against when checking consistency across PRs.
+**Application-layer:** event payload shapes, canonical model definitions, authorization scope names, API signatures.
 
-**Application-layer contracts:** event payload shapes, canonical model definitions, authorization scope names, API signatures.
-
-**Infrastructure contracts** *(when the feature touches IaC):* IAM role/policy changes, network policies, secret refs (key names, not values), resource shapes (CPU/memory/replica), K8s manifests, Terraform module versions. Treat these with the same gravity as API contracts — a breaking IaC change is as load-bearing as a breaking API change.>
+**Infrastructure** *(when the feature touches IaC):* IAM role/policy changes, network policies, secret refs (key names, not values), resource shapes (CPU/memory/replica), K8s manifests, Terraform module versions.>
 
 ## PR Sequence Overview
 
