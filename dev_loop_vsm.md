@@ -1,44 +1,91 @@
+# AI-Native Software Delivery Value Stream
+
+This document describes the end-to-end engineering value stream, split into:
+- Executive view (high-level flow)
+- Engineering execution view (detailed operational lifecycle)
+
+---
+
+# 1. Executive View (High-Level)
+
+This view is intended for product, leadership, and cross-functional alignment.
+
+```mermaid
+flowchart TD
+
+A[Business Need] --> B[PRD + Success Metrics]
+B --> C[Architecture & ADRs]
+C --> D[Build & Implement]
+D --> E[Testing & Validation]
+E --> F[Release to Production]
+F --> G[Measure Business Outcomes]
+G --> H[Learn & Iterate]
+
+H --> B
+```
+
+---
+
+# 2. Engineering Execution View (Detailed System)
+
+This is the operational model used during development and delivery.
+
+```mermaid
 flowchart TD
 
 %% =========================
 %% DISCOVERY
 %% =========================
-A[Business Need / Idea] --> B[PRD + Success Metrics]
+A[Business Need]
+B[PRD + Success Metrics]
 
-B --> C[Architecture Design]
-C --> D[ADR Creation]
-D --> E[ADR Review]
+A --> B
 
 %% =========================
-%% PLANNING
+%% ARCHITECTURE
 %% =========================
-E --> F[PR Decomposition]
-F --> G[Simplification Pass]
-G --> H[Speckit Specification]
+C[Architecture Design]
+D[ADR Creation]
+E[ADR Review]
+
+B --> C --> D --> E
+
+%% =========================
+%% DELIVERY PLANNING
+%% =========================
+F[PR Decomposition]
+G[Simplification Pass]
+H[Speckit Specification]
+
+E --> F --> G --> H
 
 %% =========================
 %% IMPLEMENTATION LOOP
 %% =========================
-H --> I[Implementation PR 1..N]
+I[Implementation PRs]
 
-I --> J[Automated Code Review]
-J --> K[Domain Expert Review]
+H --> I
 
-K --> L{Fix Required?}
+J[Automated Review]
+K[Domain Expert Review]
+
+I --> J --> K
+
+K --> L{Changes Required?}
 L -- Yes --> I
 L -- No --> M[Merge to Staging]
 
 %% =========================
 %% VALIDATION
 %% =========================
-M --> N[Integration Testing]
-N --> O[Manual QA / E2E Tests]
+N[Integration Testing]
+O[Manual QA / E2E Testing]
+P[Production Deployment]
+Q[Observability Active]
+R[Business Outcome Validation]
+S[Retrospective & Learnings]
 
-O --> P[Production Deployment]
-P --> Q[Observability Active]
-
-Q --> R[Business Outcome Validation]
-R --> S[Retrospective & Learnings]
+M --> N --> O --> P --> Q --> R --> S
 
 %% =========================
 %% FEEDBACK LOOPS
@@ -46,41 +93,56 @@ R --> S[Retrospective & Learnings]
 S --> B
 S --> C
 S --> H
+```
 
-%% =========================
-%% LOCAL DEV STACK STATES
-%% =========================
+---
 
-%% Planning stage
-B -.-> B1{{No local stack required}}
-C -.-> C1{{No local stack required}}
-D -.-> D1{{No local stack required}}
+# 3. Key Principles
 
-%% Decomposition stage
-F -.-> F1{{Light local stack (optional mocks)}}
-G -.-> G1{{Light local stack (optional mocks)}}
+## 3.1 Every phase produces an artifact
+- PRD
+- ADRs
+- Speckit
+- PRs
+- Tests
+- Metrics
+- Observability dashboards
 
-%% Speckit stage
-H -.-> H1{{Partial stack (DB schema + API stubs)}}
+---
 
-%% Implementation stage
-I -.-> I1{{FULL LOCAL STACK REQUIRED}}
-I1 --> I1a[App server]
-I1 --> I1b[Database (Postgres etc.)]
-I1 --> I1c[Background workers]
-I1 --> I1d[Queue / pubsub]
-I1 --> I1e[Frontend dev server]
-I1 --> I1f[Observability stack]
+## 3.2 Every phase has a quality gate
+Work cannot proceed without:
+- Clear inputs
+- Defined outputs
+- Explicit review criteria
 
-%% Review stage
-J -.-> J1{{Partial stack (tests + lint)}}
-K -.-> K1{{Partial or full stack depending on domain}}
+---
 
-%% Staging
-M -.-> M1{{Full staging stack required}}
-N -.-> N1{{Full staging stack required}}
-O -.-> O1{{Full staging stack required}}
+## 3.3 Feedback is mandatory
+Production outcomes feed directly back into:
+- Product discovery
+- Architecture decisions
+- Implementation specifications
 
-%% Production
-P -.-> P1{{Production stack}}
-Q -.-> Q1{{Production + monitoring stack}}
+---
+
+## 3.4 Separation of concerns
+- PRD = what + why
+- ADR = how (system-level)
+- Speckit = how (implementation-level)
+- PR = execution
+
+---
+
+# 4. Optional Extension (Operational Layering)
+
+If running locally, the implementation phase assumes:
+
+- Frontend server
+- API server
+- Database
+- Worker processes
+- Queue/pubsub
+- Observability stack
+
+(Recommended to map these to fixed ports in local dev environments)
