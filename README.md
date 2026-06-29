@@ -7,6 +7,7 @@ Shared [Claude Code skills](https://docs.anthropic.com/en/docs/claude-code/skill
 | Skill | Description |
 |-------|-------------|
 | **kimball-modeling** | Guide for designing and auditing Kimball-style dimensional models — star schemas, fact/dimension tables, SCDs, and bus matrices |
+| **problem-discovery** | Structured discovery method for ambiguous, high-stakes problems — MECE decomposition, a facts/inferences/assumptions/unknowns ledger, competing falsifiable hypotheses ranked by information gain, and a convergence check for when to stop, before jumping to a solution |
 
 ## Usage
 
